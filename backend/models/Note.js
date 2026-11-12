@@ -6,6 +6,7 @@ const noteSchema = new mongoose.Schema(
             type: String,
             required: [true, "Please add a title"],
             trim: true,
+            minlength: 3,
             maxlength: 100,
         },
 
@@ -15,7 +16,12 @@ const noteSchema = new mongoose.Schema(
             trim: true,
         },
 
-        user: {
+        tags: {
+            type: [String],
+            default: [],
+        },
+
+        owner: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             required: true,

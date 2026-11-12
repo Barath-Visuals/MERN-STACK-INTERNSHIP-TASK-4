@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import noteRoutes from './routes/noteRoutes.js';
+import { notFound, errorHandler } from './middleware/errorMiddleware.js';
+import { authLimiter } from './middleware/rateLimitMiddleware.js';
 
 dotenv.config();
 
@@ -16,7 +18,7 @@ app.use(cors({
 
 app.use(express.json());
 
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/notes', noteRoutes);
 
 app.get('/', (req, res) => {
@@ -25,6 +27,9 @@ app.get('/', (req, res) => {
         message: 'API is running...'
     })
 })
+
+app.use(notFound);
+app.use(errorHandler);
 
 const startServer = async () => {
     await connectDB();

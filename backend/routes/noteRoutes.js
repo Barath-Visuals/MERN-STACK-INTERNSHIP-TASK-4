@@ -7,17 +7,18 @@ import {
 } from '../controllers/noteController.js';
 
 import {protect} from '../middleware/authMiddleware.js';
+import { validateNote } from '../middleware/validateNote.js'
 
 const router = express.Router()
 
 router.use(protect)
 
 router.route('/')
-    .post(createNote)
+    .post(validateNote, createNote)
     .get(getNotes)
 
 router.route('/:id')
-    .post(updateNote)
+    .post(validateNote, updateNote)
     .delete(deleteNote)
 
 export default router
